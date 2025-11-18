@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const taskRoutes = require("./routes/taskRoutes");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -31,5 +32,8 @@ app.use("*", (req, res) => {
     message: "Route not found",
   });
 });
+
+// Error handling middleware (must be last)
+app.use(errorHandler);
 
 module.exports = app;
