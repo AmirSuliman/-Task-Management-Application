@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { validateTitle } from "@/utils/helpers";
 import { VALIDATION } from "@/utils/constants";
+import toast from "react-hot-toast";
 
 export default function CreateTaskForm({
   onCreateTask,
   isCreating,
+  showHeader = true,
 }: {
   onCreateTask: (taskData: {
     title: string;
     description?: string;
   }) => Promise<{ success: boolean; error?: string }>;
   isCreating: boolean;
+  showHeader?: boolean;
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [errors, setErrors] = useState<{ title?: string; submit?: string }>({});
-  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,8 +40,7 @@ export default function CreateTaskForm({
       setDescription("");
 
       // Show success message
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
+      toast.success("Task created successfully!");
     } else {
       setErrors({ submit: result.error });
     }
@@ -48,33 +49,17 @@ export default function CreateTaskForm({
   const remainingChars = VALIDATION.TITLE_MAX_LENGTH - title.length;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        Create New Task
-      </h2>
-
-      {showSuccess && (
-        <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-3">
-          <p className="text-sm text-green-800 flex items-center">
-            <svg
-              className="w-4 h-4 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Task created successfully!
-          </p>
-        </div>
+    <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6 mb-6">
+      {showHeader && (
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          Create New Task
+        </h2>
       )}
 
+
       {errors.submit && (
-        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3">
-          <p className="text-sm text-red-800">{errors.submit}</p>
+        <div className="mb-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-lg p-3">
+          <p className="text-sm text-red-800 dark:text-red-200">{errors.submit}</p>
         </div>
       )}
 
@@ -82,7 +67,7 @@ export default function CreateTaskForm({
         <div className="mb-4">
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
           >
             Title <span className="text-red-500">*</span>
           </label>
@@ -94,20 +79,30 @@ export default function CreateTaskForm({
             placeholder="Enter task title"
             maxLength={VALIDATION.TITLE_MAX_LENGTH}
             className={`
-              w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
-              ${errors.title ? "border-red-300 bg-red-50" : "border-gray-300"}
+              w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-slate-950 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500
+              ${
+                errors.title
+                  ? "border-red-300 bg-red-50 dark:bg-red-950/30"
+                  : "border-gray-300 dark:border-slate-700"
+              }
             `}
             disabled={isCreating}
           />
           <div className="flex justify-between mt-1">
             {errors.title ? (
-              <p className="text-sm text-red-600">{errors.title}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {errors.title}
+              </p>
             ) : (
-              <p className="text-sm text-gray-500">Required field</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Required field
+              </p>
             )}
             <p
               className={`text-sm ${
-                remainingChars < 20 ? "text-orange-600" : "text-gray-500"
+                remainingChars < 20
+                  ? "text-orange-600 dark:text-orange-400"
+                  : "text-gray-500 dark:text-gray-400"
               }`}
             >
               {remainingChars} chars left
@@ -118,7 +113,7 @@ export default function CreateTaskForm({
         <div className="mb-4">
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
           >
             Description
           </label>
@@ -128,16 +123,18 @@ export default function CreateTaskForm({
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter task description (optional)"
             rows={3}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none bg-white dark:bg-slate-950 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
             disabled={isCreating}
           />
-          <p className="text-sm text-gray-500 mt-1">Optional field</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Optional field
+          </p>
         </div>
 
         <button
           type="submit"
           disabled={isCreating || !title.trim()}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isCreating ? (
             <span className="flex items-center justify-center">

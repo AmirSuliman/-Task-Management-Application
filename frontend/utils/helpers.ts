@@ -1,8 +1,8 @@
 // Format date to readable string
-export const formatDate = (dateString) => {
+export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000);
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   // Less than a minute
   if (diffInSeconds < 60) {
@@ -36,14 +36,14 @@ export const formatDate = (dateString) => {
 };
 
 // Truncate text to specific length
-export const truncateText = (text, maxLength = 100) => {
+export const truncateText = (text: string, maxLength = 100) => {
   if (!text) return "";
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + "...";
 };
 
 // Validate task title
-export const validateTitle = (title) => {
+export const validateTitle = (title: string) => {
   if (!title || title.trim().length === 0) {
     return "Title is required";
   }

@@ -14,7 +14,7 @@ export default function FilterTabs({
 }) {
   return (
     <div className="border-b border-gray-200">
-      <nav className="flex space-x-4 overflow-x-auto" aria-label="Tabs">
+      <nav className="flex space-x-4 overflow-x-auto px-4" aria-label="Tabs">
         {FILTER_TABS.map((tab) => {
           const isActive = activeFilter === tab.id;
           const count = taskCounts[tab.id] || 0;
