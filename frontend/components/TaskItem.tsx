@@ -3,6 +3,7 @@ import { STATUS_CONFIG } from "@/utils/constants";
 import { formatDate } from "@/utils/helpers";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import { Task, TaskStatus } from "@/types/common";
+import toast from "react-hot-toast";
 
 export default function TaskItem({
   task,
@@ -32,6 +33,7 @@ export default function TaskItem({
     const result = await onDelete(task.id);
     if (result.success) {
       setShowDeleteModal(false);
+      toast.success("Task deleted successfully!");
     }
     setIsDeleting(false);
   };
@@ -39,7 +41,7 @@ export default function TaskItem({
   return (
     <>
       <div
-        className={`bg-white rounded-lg shadow-sm border-l-4 ${statusConfig.color} p-4 hover:shadow-md transition-shadow`}
+        className={`bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-100 dark:border-slate-700 border-l-4 ${statusConfig.color} p-4 hover:shadow-md transition-shadow`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
@@ -53,30 +55,30 @@ export default function TaskItem({
                 ></span>
                 {statusConfig.label}
               </span>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-gray-500 dark:text-gray-400">
                 {formatDate(task.createdAt)}
               </span>
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold text-gray-900 mb-1 break-words">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1 break-words">
               {task.title}
             </h3>
 
             {/* Description */}
             {task.description && (
-              <p className="text-gray-600 text-sm mb-3 break-words whitespace-pre-wrap">
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-3 break-words whitespace-pre-wrap">
                 {task.description}
               </p>
             )}
 
             {/* Actions */}
-            <div className="flex items-center gap-2 mt-3">
+            <div className="flex items-center justify-end gap-2 mt-3">
               {statusConfig.nextStatus && (
                 <button
                   onClick={handleStatusUpdate}
                   disabled={isUpdating}
-                  className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-950/50 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {isUpdating ? (
                     <>
@@ -125,7 +127,7 @@ export default function TaskItem({
               <button
                 onClick={() => setShowDeleteModal(true)}
                 disabled={isDeleting}
-                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 dark:text-red-300 dark:bg-red-950/50 rounded-md hover:bg-red-100 dark:hover:bg-red-900/50 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <svg
                   className="w-3.5 h-3.5 mr-1"

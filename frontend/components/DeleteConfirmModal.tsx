@@ -14,18 +14,19 @@ export default function DeleteConfirmModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+     
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+        className="absolute inset-0 bg-black/50"
         onClick={onClose}
+
       ></div>
 
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div className="relative bg-white dark:bg-slate-900 rounded-lg shadow-xl border border-transparent dark:border-slate-800 max-w-md w-full p-6">
           {/* Icon */}
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/40">
             <svg
               className="h-6 w-6 text-red-600"
               fill="none"
@@ -43,11 +44,13 @@ export default function DeleteConfirmModal({
 
           {/* Content */}
           <div className="mt-3 text-center">
-            <h3 className="text-lg font-semibold text-gray-900">Delete Task</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Delete Task
+            </h3>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Are you sure you want to delete{" "}
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 dark:text-gray-200">
                   &#34;{taskTitle}&#34;
                 </span>
                 ? This action cannot be undone.
@@ -61,7 +64,7 @@ export default function DeleteConfirmModal({
               type="button"
               onClick={onClose}
               disabled={isDeleting}
-              className="flex-1 bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
@@ -69,7 +72,7 @@ export default function DeleteConfirmModal({
               type="button"
               onClick={onConfirm}
               disabled={isDeleting}
-              className="flex-1 bg-red-600 px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-red-600 px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isDeleting ? "Deleting..." : "Delete"}
             </button>
