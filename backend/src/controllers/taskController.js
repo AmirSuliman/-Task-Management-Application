@@ -26,7 +26,7 @@ exports.createTask = async (req, res, next) => {
 // @access  Public
 exports.getAllTasks = async (req, res, next) => {
   try {
-    const { status } = req.query;
+    const { status, sort, search } = req.query;
 
     // Build query
     const query = {};
@@ -46,7 +46,21 @@ exports.getAllTasks = async (req, res, next) => {
       query.status = status;
     }
 
-    const tasks = await Task.find(query).sort({ createdAt: -1 });
+    // Sort by createdAt or status
+    let findQuery = Task.find(query);
+
+    if (sort === "createdAt") {
+      findQuery = findQuery.sort({ createdAt: -1 });
+    } else if (sort === "status") {
+      findQuery = findQuery.sort({ status: 1 });
+    }
+
+    // Search by title
+    if (search) {
+      findQuery = findQuery.find({ title: { $regex: search, $options: "i" } });
+    }
+
+    const tasks = await findQuery;
 
     res
       .status(200)

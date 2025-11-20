@@ -7,6 +7,8 @@ export const useTasks = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | TaskStatus>("all");
+  const [sort, setSort] = useState<"createdAt" | "status">("createdAt");
+  const [search, setSearch] = useState('')
 
   // Fetch tasks
   const fetchTasks = useCallback(async () => {
@@ -14,7 +16,7 @@ export const useTasks = () => {
       setLoading(true);
       setError(null);
       const statusFilter = filter === "all" ? null : filter;
-      const data = await taskService.getTasks(statusFilter);
+      const data = await taskService.getTasks(statusFilter, sort, search);
       setTasks(data as Task[]);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -22,7 +24,7 @@ export const useTasks = () => {
     } finally {
       setLoading(false);
     }
-  }, [filter]);
+  }, [filter, sort, search]);
 
   // Load tasks on mount and when filter changes
   useEffect(() => {
@@ -106,8 +108,12 @@ export const useTasks = () => {
     tasks,
     loading,
     error,
+    sort,
+    setSort,
     filter,
     setFilter,
+    search,
+    setSearch,
     createTask,
     updateTaskStatus,
     deleteTask,
