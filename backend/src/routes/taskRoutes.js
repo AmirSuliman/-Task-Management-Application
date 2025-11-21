@@ -5,12 +5,20 @@ const {
   validateCreateTask,
   validateUpdateTask,
 } = require("../middleware/validateRequest");
+const connectDB = require("../config/database");
 
 // POST /api/tasks - Create new task
-router.post("/", validateCreateTask, taskController.createTask);
+router.post("/", async (req, res, next) => {
+  await connectDB();
+  next();
+}, validateCreateTask, taskController.createTask);
 
 // GET /api/tasks - Get all tasks (with optional status filter)
-router.get("/", taskController.getAllTasks);
+// Connect to MongoDB before processing the request (for vercel deployment)
+router.get("/",async (req, res, next) => {
+  await connectDB();
+  next();
+}, taskController.getAllTasks);
 
 // PATCH /api/tasks/:id - Update task status
 router.patch("/:id", validateUpdateTask, taskController.updateTaskStatus);

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const taskRoutes = require("./routes/taskRoutes");
 const errorHandler = require("./middleware/errorHandler");
+const connectDB = require("./config/database");
 
 const app = express();
 
@@ -24,6 +25,16 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/api/tasks", taskRoutes);
+
+app.get("/api/ping-mongo", async (req, res) => {
+  try {
+    await connectDB();
+    res.json({ connected: true });
+  } catch (err) {
+    res.json({ connected: false, error: err.message });
+  }
+});
+
 
 // 404 handler
 app.use("*", (req, res) => {
